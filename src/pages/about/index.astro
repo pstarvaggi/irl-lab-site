@@ -1,0 +1,27 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "About | Independent Reinforcement Learning Lab";
+const description = "About the Independent Reinforcement Learning Lab and Patrick Starvaggi.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/about/">
+  <header class="index-hero about-hero">
+    <p class="kicker">About</p>
+    <h1>Independent RL Lab.</h1>
+    <p>I use specified environments to study how learned policies change with dynamics, rewards, exploration, and information.</p>
+  </header>
+  <section class="about-copy">
+    <div class="section-rail"><span>IRL</span><p>THE NAME</p></div>
+    <div class="prose">
+      <p class="lead">IRL stands for independent reinforcement learning. The lab is separate. The hyphen leaves the other reading in place.</p>
+      <p>I returned to reinforcement learning after time away and wanted better machinery than a folder of isolated notebooks. The result is both a software project and a sequence of public experiments: environments with known mechanics, exact solvers where possible, matched comparisons, versioned artifacts, and notes that distinguish what the model predicts from what the data supports.</p>
+      <p>The current experiments focus on finite environments where the transition model can often be solved numerically. They concern specific learning mechanisms and do not make claims about intelligence in general.</p>
+      <p>I am Patrick Starvaggi. This is an independent project, not an institution, company, or academic lab.</p>
+      <div class="about-links">
+        <a class="text-link" href="/experiments/">Browse experiments →</a>
+        <a class="text-link" href="https://github.com/pstarvaggi/independent-rl-lab">View the source ↗</a>
+      </div>
+    </div>
+  </section>
+</BaseLayout>

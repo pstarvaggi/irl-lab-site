@@ -1,0 +1,25 @@
+---
+import katex from "katex";
+import "katex/dist/katex.min.css";
+
+interface Props {
+  tex: string;
+  display?: boolean;
+  label?: string;
+}
+
+const { tex, display = false, label } = Astro.props;
+const html = katex.renderToString(tex, {
+  displayMode: display,
+  output: "htmlAndMathml",
+  throwOnError: true,
+  strict: "warn",
+});
+const Tag = display ? "div" : "span";
+---
+
+<Tag
+  class:list={[display ? "math-display" : "math-inline"]}
+  aria-label={label}
+  set:html={html}
+/>

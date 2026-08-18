@@ -1,5 +1,8 @@
 ---
 import SiteHeader from "../components/SiteHeader.astro";
+import "@fontsource-variable/ibm-plex-sans";
+import "@fontsource-variable/source-serif-4";
+import "@fontsource/ibm-plex-mono/400.css";
 import "../styles/global.css";
 
 interface Props {
@@ -7,6 +10,9 @@ interface Props {
   description: string;
   canonicalPath?: string;
   article?: boolean;
+  published?: string;
+  updated?: string;
+  socialImage?: string | null;
 }
 
 const {
@@ -14,8 +20,12 @@ const {
   description,
   canonicalPath = Astro.url.pathname,
   article = false,
+  published,
+  updated,
+  socialImage = article ? null : "/og.png",
 } = Astro.props;
 const canonical = new URL(canonicalPath, Astro.site);
+const socialImageUrl = socialImage ? new URL(socialImage, Astro.site) : null;
 ---
 
 <!doctype html>
@@ -24,15 +34,21 @@ const canonical = new URL(canonicalPath, Astro.site);
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
     <meta name="generator" content={Astro.generator} />
-    <meta name="theme-color" content="#f3efe6" />
+    <meta name="theme-color" content="#f7f4ed" />
     <meta name="description" content={description} />
     <link rel="canonical" href={canonical} />
+    <link rel="icon" href="/favicon.svg" type="image/svg+xml" />
     <meta property="og:type" content={article ? "article" : "website"} />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:site_name" content="Independent Reinforcement Learning Lab" />
-    <meta name="twitter:card" content="summary" />
+    {published && <meta property="article:published_time" content={published} />}
+    {updated && <meta property="article:modified_time" content={updated} />}
+    {article && <meta property="article:author" content="Patrick Starvaggi" />}
+    {socialImageUrl && <meta property="og:image" content={socialImageUrl} />}
+    {socialImageUrl && <meta property="og:image:alt" content="Independent RL Lab — experiments in sequential decision making under uncertainty" />}
+    <meta name="twitter:card" content={socialImageUrl ? "summary_large_image" : "summary"} />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <title>{title}</title>
@@ -41,13 +57,13 @@ const canonical = new URL(canonicalPath, Astro.site);
     <a class="skip-link" href="#content">Skip to content</a>
     <div class="site-shell">
       <SiteHeader />
-      <main id="content">
+      <main id="content" tabindex="-1">
         <slot />
       </main>
       <footer class="site-footer">
-        <p>Independent Reinforcement Learning Lab</p>
-        <p>Small environments. Exact baselines. Reproducible experiments.</p>
-        <p class="footer-meta">A personal research project by Patrick Starvaggi.</p>
+        <p><a href="/">Independent Reinforcement Learning Lab</a></p>
+        <p><a href="/experiments/">Experiments</a> · <a href="/methods/">Methods</a> · <a href="/about/">About</a></p>
+        <p class="footer-meta"><a href="https://github.com/pstarvaggi/independent-rl-lab">Code and configurations</a></p>
       </footer>
     </div>
   </body>

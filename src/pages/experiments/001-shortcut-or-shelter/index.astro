@@ -1,0 +1,359 @@
+---
+import ExperimentMap from "../../../components/ExperimentMap.astro";
+import Math from "../../../components/Math.astro";
+import { shortcutOrShelter as experiment } from "../../../data/experiments";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const title = "Shortcut or shelter? | Independent Reinforcement Learning Lab";
+const description =
+  "An exact-first study of how actuator noise, continued exploration, and three TD-control backups change route choice in a small stochastic maze.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={experiment.slug}
+  article
+  published="2026-08-18"
+  updated={experiment.updated}
+>
+  <article class="research-note">
+    <header class="article-hero">
+      <div class="article-meta">
+        <span>EXPERIMENT {experiment.number}</span>
+        <span>{experiment.date}</span>
+        <span>{experiment.statusDetail}</span>
+      </div>
+      <h1>Shortcut <em>or shelter?</em></h1>
+      <p class="article-deck">{experiment.subtitle}</p>
+      <p class="article-standfirst">
+        An exposed route is shorter. A protected route is slower. I solve for the
+        reliability at which the preference changes, then test whether Q-learning,
+        SARSA, and Expected SARSA recover the boundary implied by the objective they learn.
+      </p>
+      <div class="article-byline">
+        <span>Patrick Starvaggi</span>
+        <span>12–15 minute read</span>
+      </div>
+    </header>
+
+    <aside class="study-notice" aria-labelledby="study-status-title">
+      <p id="study-status-title">DATA COLLECTED · ANALYSIS PENDING</p>
+      <div>
+        <strong>This version reports the model and protocol. Empirical estimates are pending artifact validation.</strong>
+        <span>All {experiment.totalTrials.toLocaleString("en-US")} planned trials completed. Empirical figures remain withheld until the checks below pass.</span>
+      </div>
+    </aside>
+
+    <section class="article-section" aria-labelledby="world-title">
+      <div class="section-rail"><span>01</span><p>THE WORLD</p></div>
+      <div class="prose">
+        <h2 id="world-title">One fork, two routes.</h2>
+        <p class="lead">
+          I chose a small environment because its states, transitions, and rewards can
+          be enumerated, and its optimal policy can be computed before training begins.
+        </p>
+        <p>
+          The agent starts at a fork. EAST enters a short corridor with hazards on both
+          sides. SOUTH begins a longer route protected by a wall and the edge of the
+          grid. The same actuator noise applies everywhere; the southern route is safer
+          because of its geometry, not because its controls are more reliable.
+        </p>
+        <p class="research-question"><strong>Research question.</strong> How reliable must the world be before the shortcut is worth taking?</p>
+        <p>
+          The purpose is not to rank the algorithms. It is to locate a policy change,
+          explain why it occurs, and test whether finite training recovers the predicted boundary.
+        </p>
+      </div>
+      <div class="wide-figure">
+        <ExperimentMap />
+        <p class="figure-caption"><strong>Figure 1.</strong> EAST enters the exposed corridor; SOUTH begins the protected route. Intended actions execute with probability <em>p</em>.</p>
+      </div>
+      <div class="prose">
+        <p>
+          The central corridor reaches the goal in eight eastward moves. The southern
+          route is four moves longer under perfect control. Every movement costs
+          <Math tex="-0.06" />, reaching the goal adds <Math tex="+8" />, and future
+          rewards are discounted by <Math tex="\gamma=0.98" />.
+        </p>
+        <p>
+          I keep the geometry fixed and change the consequence law. A recoverable
+          hazard adds <Math tex="-0.50" /> and the episode continues. A lethal hazard
+          adds <Math tex="-8" />, ends the episode, and removes the chance to reach the goal.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="primer-title">
+      <div class="section-rail"><span>02</span><p>THE VALUE</p></div>
+      <div class="prose">
+        <h2 id="primer-title">The quantity being learned.</h2>
+        <p>
+          A policy <Math tex="\pi" /> maps a state to a distribution over actions. Its
+          return from time <Math tex="t" /> is the discounted sum of future rewards:
+        </p>
+        <Math display tex="G_t=\sum_{k=0}^{\infty}\gamma^k R_{t+k+1}." />
+        <p>The action value is the expected return after one action and the policy that follows:</p>
+        <Math display tex="Q^\pi(s,a)=\mathbb E_\pi\!\left[G_t\mid S_t=s,\ A_t=a\right]." />
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="boundary-title">
+      <div class="section-rail"><span>03</span><p>THE BOUNDARY</p></div>
+      <div class="prose">
+        <h2 id="boundary-title">A boundary in reliability.</h2>
+        <p>Let <Math tex="s_0" /> be the start. Define the start-state action gap</p>
+        <Math display tex="\Delta^\star(p)=Q^\star_p(s_0,\mathrm{EAST})-Q^\star_p(s_0,\mathrm{SOUTH})." />
+        <p>
+          Positive values favor the corridor; negative values favor the shelter. The
+          policy boundary <Math tex="p^\star" /> is the zero crossing.
+        </p>
+        <p>
+          Because the transition and reward model are known, the optimal values satisfy
+          the Bellman equation and can be solved directly:
+        </p>
+        <Math display tex="Q^\star_p(s,a)=\sum_{s',r}P_p(s',r\mid s,a)\left[r+\gamma\max_{a'}Q^\star_p(s',a')\right]." />
+      </div>
+      <div class="exact-table-wrap" role="region" aria-label="Exact-model route boundaries" tabindex="0">
+        <p class="table-label">EXACT-MODEL CALCULATION · NOT A LEARNED RESULT</p>
+        <table class="exact-table">
+          <thead><tr><th scope="col">Hazard law</th><th scope="col">Continuation policy</th><th scope="col">Boundary</th></tr></thead>
+          <tbody>
+            {experiment.exactPredictions.map((item) => (
+              <tr><td>{item.hazard}</td><td>{item.objective}</td><td><strong>{item.boundary}</strong><small>{item.note}</small></td></tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="calculation-note">
+          Value iteration stops at a Bellman residual of 10<sup>−10</sup>. The displayed
+          boundaries are numerical zero crossings, rounded to three decimal places.
+        </p>
+      </div>
+      <div class="prose">
+        <p>
+          The lethal boundary is compressed close to perfect execution because the
+          corridor is not a single gamble. It requires repeated exposed decisions. In a
+          simplified passage requiring <Math tex="m" /> clean movements, a clean run
+          scales as <Math tex="p^m" />. The full maze is solved exactly rather than
+          reduced to that expression, but the compounding mechanism remains.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="randomness-title">
+      <div class="section-rail"><span>04</span><p>TWO RANDOMNESSES</p></div>
+      <div class="prose">
+        <h2 id="randomness-title">World noise is not agent exploration.</h2>
+        <p>
+          Reliability <Math tex="p" /> belongs to the environment. An intended action
+          executes correctly with probability <Math tex="p" />; otherwise it slips
+          left or right with probability <Math tex="(1-p)/2" /> each.
+        </p>
+        <p>
+          Exploration <Math tex="\epsilon" /> belongs to the behavior policy. Here,
+        </p>
+        <Math display tex="\pi_\epsilon(a\mid s)=(1-\epsilon)\mathbf 1\{a=a^\star(s)\}+\frac{\epsilon}{|\mathcal A|}." />
+        <p>
+          Lowering <Math tex="p" /> changes the dynamics. Raising
+          <Math tex="\epsilon" /> changes the continuation policy being valued. The
+          distinction survives even at <Math tex="p=1" />: perfect actuation cannot
+          prevent an exploratory policy from selecting a bad action.
+        </p>
+        <p>
+          In the lethal maze, persistent <Math tex="\epsilon=.10" /> exploration is
+          costly enough that the exact epsilon-soft solution prefers the shelter even
+          under perfect actuation. Frozen-greedy deployment and continued online
+          exploration are different decision problems.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="backups-title">
+      <div class="section-rail"><span>05</span><p>THE BACKUPS</p></div>
+      <div class="prose">
+        <h2 id="backups-title">Three rules, two continuation objectives.</h2>
+        <p>All three methods update an action value by</p>
+        <Math display tex="Q(S_t,A_t)\leftarrow Q(S_t,A_t)+\alpha\left[Y_t-Q(S_t,A_t)\right]." />
+        <p>
+          They differ in the target <Math tex="Y_t" />. Here
+          <Math tex="d_{t+1}" /> is one only for a true terminal transition; the
+          continuation value is then zero.
+        </p>
+      </div>
+      <div class="algorithm-list">
+        <article><p>OFF-POLICY</p><h3>Q-learning</h3><Math display tex="Y_t^Q=R_{t+1}+\gamma(1-d_{t+1})\max_a Q(S_{t+1},a)" /><p>Bootstraps toward the best next action. Its control target is greedy.</p></article>
+        <article><p>ON-POLICY</p><h3>SARSA</h3><Math display tex="Y_t^{\mathrm{SARSA}}=R_{t+1}+\gamma(1-d_{t+1})Q(S_{t+1},A_{t+1})" /><p>Uses the next action actually selected, including the consequences of continued exploration.</p></article>
+        <article><p>ON-POLICY · EXPECTED</p><h3>Expected SARSA</h3><Math display tex="Y_t^{\mathrm{Exp}}=R_{t+1}+\gamma(1-d_{t+1})\sum_a\pi_\epsilon(a\mid S_{t+1})Q(S_{t+1},a)" /><p>Integrates over the next-action distribution. At the same state, transition, Q-table, and behavior policy, its conditional expected target matches SARSA's while removing next-action sampling noise.</p></article>
+      </div>
+      <div class="prose">
+        <p>
+          Under persistent exploration, Q-learning should approach the greedy boundary,
+          while SARSA and Expected SARSA should approach the epsilon-soft boundary.
+          The difference is the continuation value inside the update.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="protocol-title">
+      <div class="section-rail"><span>06</span><p>THE PROTOCOL</p></div>
+      <div class="prose">
+        <h2 id="protocol-title">The training unit is an interaction.</h2>
+        <p>
+          Shelter-taking policies produce longer episodes. Equal episode counts would
+          give them more transitions and more updates, so every primary trial receives
+          the same 100,000-interaction budget.
+        </p>
+        <p>
+          Episodes are capped at 250 steps. Time-limit truncation resets the rollout but
+          does not suppress the bootstrap; true termination does. The exact-model
+          reference is the corresponding discounted infinite-horizon MDP, so truncation
+          frequency is one of the empirical checks rather than an unspoken equivalence.
+        </p>
+        <p>
+          Numerical reference solutions determined where the reliability grids required resolution. Small
+          pilot runs then calibrated coverage, learning rate, and budget. The full
+          configurations were fixed after that calibration. This is a prespecified
+          full-run design, not a claim of preregistration.
+        </p>
+      </div>
+      <dl class="protocol-grid">
+        <div><dt>Training budget</dt><dd>100,000 transitions</dd></div>
+        <div><dt>Learning rate</dt><dd>α = 0.05</dd></div>
+        <div><dt>Discount</dt><dd>γ = 0.98</dd></div>
+        <div><dt>Exploration</dt><dd>ε = 0.10</dd></div>
+        <div><dt>Initial values</dt><dd>Q(s, a) = 8</dd></div>
+        <div><dt>Independent units</dt><dd>20 seeds per condition</dd></div>
+        <div><dt>Checkpoints</dt><dd>Every 2,500 transitions</dd></div>
+        <div><dt>Held-out evaluation</dt><dd>25 greedy + 25 behavior episodes</dd></div>
+      </dl>
+      <div class="prose">
+        <p>
+          Uniform optimistic initialization is a declared coverage device. The primary learned estimand is the fraction of independent seeds
+          whose final greedy start action is EAST. A tie, NORTH, or WEST remains
+          classified as <code>other</code>; it is not silently converted into one of the
+          expected routes.
+        </p>
+        <p>
+          Training seeds carry the uncertainty. Evaluation episodes within one trained
+          policy are repeated measurements, not additional replicates.
+        </p>
+      </div>
+      <div class="trial-ledger" aria-label="Trial counts">
+        <div><strong>1,080</strong><span>recoverable trials</span></div>
+        <div><strong>840</strong><span>lethal trials</span></div>
+        <div><strong>72</strong><span>annealing checks</span></div>
+        <div><strong>199.2M</strong><span>training interactions</span></div>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="predictions-title">
+      <div class="section-rail"><span>07</span><p>PREDICTIONS</p></div>
+      <div class="prose">
+        <h2 id="predictions-title">Predictions before analysis.</h2>
+        <ol class="numbered-claims">
+          <li>Q-learning should place its finite-budget route transition near the greedy model boundary.</li>
+          <li>SARSA and Expected SARSA should place theirs nearer the persistent-epsilon model boundary.</li>
+          <li>At a common Q-table, state, transition, and behavior policy, SARSA and Expected SARSA targets agree in conditional expectation; Expected SARSA removes the next-action component of target variance.</li>
+          <li>When exploration anneals to zero, all three methods should move toward the same greedy route where the two exact objectives disagree.</li>
+        </ol>
+        <p>
+          The fourth prediction is the important check. If the methods do not converge
+          toward the common greedy route, the continuation-objective explanation is
+          incomplete. Insufficient optimization, poor coverage, constant-step-size
+          behavior, or the training budget would still need to be considered.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section pending-section" aria-labelledby="results-title">
+      <div class="section-rail"><span>08</span><p>EMPIRICAL RESULTS</p></div>
+      <div class="prose">
+        <p class="table-label">VALIDATION IN PROGRESS</p>
+        <h2 id="results-title">Empirical figures are still withheld.</h2>
+        <p>
+          All {experiment.totalTrials.toLocaleString("en-US")} planned trials reached
+          succeeded manifest states, with zero recorded failures. I am checking
+          completeness, evaluation pairing, and late-training stability before
+          reporting the learned boundaries.
+        </p>
+        <p>The empirical figures remain unpublished until these checks pass:</p>
+        <ul class="check-list">
+          <li>artifact and manifest integrity;</li>
+          <li>exactly 100,000 interactions in every trial;</li>
+          <li>matched held-out evaluation seeds across policy modes;</li>
+          <li>late-training route stability at calibration endpoints;</li>
+          <li>the frequency of 250-step truncations;</li>
+          <li>explicit reporting of nonmonotone learned curves;</li>
+          <li>right-censoring when a 50% boundary is absent from the grid;</li>
+          <li>confirmation that no Quick-mode output enters the analysis.</li>
+        </ul>
+        <p>
+          At each reliability value, a trained greedy policy makes a discrete start-state
+          choice. The final fraction will describe disagreement across independently
+          trained policies; it is not a stochastic mixture used by one policy.
+        </p>
+      </div>
+      <aside class="planned-evidence">
+        <p>PLANNED EVIDENCE</p>
+        <ol>
+          <li>Seed-level corridor selection</li>
+          <li>Boundary estimates and uncertainty</li>
+          <li>Movement over training</li>
+          <li>Greedy versus continuing-behavior returns</li>
+          <li>Deployment regret and hazard exposure</li>
+          <li>Policy atlas and declared-seed rollouts</li>
+        </ol>
+      </aside>
+    </section>
+
+    <section class="article-section" aria-labelledby="limits-title">
+      <div class="section-rail"><span>09</span><p>LIMITS</p></div>
+      <div class="prose">
+        <h2 id="limits-title">What the evidence can support.</h2>
+        <p>
+          The final result will be conditional on the topology, reward law, discount,
+          exploration rule, initialization, and 100,000-transition budget. It will not
+          establish that SARSA is universally safer, that Q-learning is inherently
+          reckless, or that one method is generally superior.
+        </p>
+        <p>
+          The EAST/SOUTH summary is also restricted to the plotted high-reliability
+          domain. At sufficiently poor control, NORTH or WEST can become exact-optimal.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section reproducibility" aria-labelledby="repro-title">
+      <div class="section-rail"><span>10</span><p>REPRODUCIBILITY</p></div>
+      <div class="prose">
+        <h2 id="repro-title">Code, configurations, and run identifiers.</h2>
+        <p>The full runs were produced from clean Git commit:</p>
+        <p class="hash"><code>{experiment.gitCommit}</code></p>
+        <p>
+          Environment, agents, exact solvers, protocol, versioned configurations, and
+          the generated analysis notebook are public. Raw Protocol-v2 artifacts remain
+          local while validation is underway; the published record will include curated
+          tables, figures, manifests, provenance, and compact data sufficient to
+          reconstruct every reported statistic.
+        </p>
+        <a class="text-link" href="https://github.com/pstarvaggi/independent-rl-lab">Open the repository <span aria-hidden="true">↗</span></a>
+      </div>
+      <details class="run-identifiers">
+        <summary>Full run identifiers</summary>
+        <ul>{experiment.runIds.map((runId) => <li><code>{runId}</code></li>)}</ul>
+      </details>
+    </section>
+
+    <footer class="article-closing">
+      <p>
+        This experiment uses a small environment so the exact objective and learned
+        behavior can be compared directly.
+      </p>
+      <p>
+        The next experiment asks what changes when the danger itself has memory and the
+        current regime may or may not be observable.
+      </p>
+      <a class="text-link" href="/experiments/">All experiments →</a>
+    </footer>
+  </article>
+</BaseLayout>

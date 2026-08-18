@@ -3,6 +3,10 @@ import sitemap from "@astrojs/sitemap";
 
 export default defineConfig({
   site: "https://irl-lab.starvaggi.us",
-  integrations: [sitemap()],
+  integrations: [
+    sitemap({
+      filter: (page) => !page.includes("/notes/"),
+    }),
+  ],
   output: "static",
 });

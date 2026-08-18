@@ -1,0 +1,26 @@
+---
+import BaseLayout from "../../layouts/BaseLayout.astro";
+
+const title = "Methods | Independent Reinforcement Learning Lab";
+const description = "How Independent RL Lab experiments are designed, run, evaluated, and reported.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/methods/">
+  <header class="index-hero">
+    <h1>Methods</h1>
+    <p>How the experiments are designed, run, evaluated, and reported.</p>
+  </header>
+  <section class="method-index">
+    <article><span>01</span><div><h2>Estimands</h2><p>Each experiment names the quantity it is trying to learn about before choosing a plot. Route choice, action-value error, regret, and held-out return answer different questions.</p></div></article>
+    <article><span>02</span><div><h2>Exact model references</h2><p>For known finite transition models, dynamic programming establishes the reference policy and identifies the parameter region where learning deserves close inspection.</p></div></article>
+    <article><span>03</span><div><h2>Seeds and uncertainty</h2><p>Episodes within one trained policy are repeated measurements. Uncertainty is carried by independently trained seeds, with matched seed panels used for method contrasts.</p></div></article>
+    <article><span>04</span><div><h2>Interaction budgets</h2><p>Policies can induce trajectories of different lengths. Counting transitions rather than episodes keeps the amount of experience comparable.</p></div></article>
+    <article><span>05</span><div><h2>Held-out evaluation</h2><p>Exploratory training trajectories and update-free held-out evaluations are recorded separately. Greedy deployment and continued exploratory behavior are separate evaluation conditions.</p></div></article>
+    <article><span>06</span><div><h2>Exceptions and failures</h2><p>Nonmonotone curves, ties, censored boundaries, instability, failed runs, and protocol changes are included in the reported record.</p></div></article>
+  </section>
+  <section class="source-note">
+    <h2>Implementation.</h2>
+    <p>Environment definitions, agents, exact solvers, experiment protocols, tests, and versioned configurations live in the project repository.</p>
+    <a class="text-link" href="https://github.com/pstarvaggi/independent-rl-lab">Open the source <span aria-hidden="true">↗</span></a>
+  </section>
+</BaseLayout>

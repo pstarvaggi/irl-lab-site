@@ -1,80 +1,72 @@
 ---
 import ExperimentMap from "../components/ExperimentMap.astro";
+import { shortcutOrShelter } from "../data/experiments";
 import BaseLayout from "../layouts/BaseLayout.astro";
 
 const title = "Independent Reinforcement Learning Lab";
-const description = "Exact-first research notes and reproducible reinforcement-learning experiments by Patrick Starvaggi.";
+const description =
+  "Reinforcement-learning experiments and research notes by Patrick Starvaggi, with exact model references where possible.";
 ---
 
 <BaseLayout title={title} description={description} canonicalPath="/">
   <section class="home-hero">
-    <div class="eyebrow"><span>IRL LAB / FIELD NOTE 001</span><span>EST. 2026</span></div>
-    <h1>Small worlds.<br /><em>Hard questions.</em></h1>
+    <h1>Independent <em>RL Lab.</em></h1>
     <div class="hero-deck">
       <p>
-        A personal laboratory for rebuilding reinforcement learning from first
-        principles—one controlled environment, exact baseline, and honest uncertainty
-        statement at a time.
+        Experiments in sequential decision making under uncertainty. I build controlled
+        environments, solve what I can exactly, and test where learned behavior changes.
       </p>
-      <div class="study-status" aria-label="Current study status">
-        <span class="status-dot"></span>
-        <div>
-          <strong>Study 01 data collected</strong>
-          <small>1,992 trials complete · validation and analysis underway</small>
-        </div>
-      </div>
+      <dl class="quiet-status" aria-label="Current experiment status">
+        <div><dt>Current experiment</dt><dd>{shortcutOrShelter.number}</dd></div>
+        <div><dt>Status</dt><dd>{shortcutOrShelter.statusDetail}</dd></div>
+      </dl>
     </div>
   </section>
 
   <section class="featured-study" aria-labelledby="featured-title">
     <div class="feature-copy">
-      <p class="section-number">01 / CURRENT STUDY</p>
-      <h2 id="featured-title">Shortcut<br />or shelter?</h2>
-      <p class="feature-lede">
-        A noisy corridor is fast. A southern route is longer but protected. Where does
-        the optimal route switch—and does a learning algorithm target the same boundary
-        when exploration continues?
-      </p>
-      <div class="chip-row" aria-label="Study methods">
-        <span>Q-learning</span><span>SARSA</span><span>Expected SARSA</span>
-      </div>
-      <a class="text-link" href="/notes/shortcut-or-shelter/">
-        Read the live research scaffold <span aria-hidden="true">↗</span>
+      <p class="section-number">EXPERIMENT {shortcutOrShelter.number}</p>
+      <h2 id="featured-title">{shortcutOrShelter.title}</h2>
+      <p class="feature-subtitle">{shortcutOrShelter.subtitle}</p>
+      <p class="feature-lede">{shortcutOrShelter.description}</p>
+      <p class="method-line">{shortcutOrShelter.methods.join(" · ")}</p>
+      <a class="text-link" href={shortcutOrShelter.slug}>
+        Read the experiment <span aria-hidden="true">→</span>
       </a>
     </div>
     <div class="feature-visual">
       <ExperimentMap />
-      <div class="visual-note">
-        <span>Known dynamics</span>
-        <span>Two consequence laws</span>
-        <span>Paired seed panel</span>
-      </div>
+      <p class="figure-note">
+        Known transition law · two hazard consequences · {shortcutOrShelter.totalTrials.toLocaleString("en-US")} trials
+      </p>
     </div>
   </section>
 
-  <section class="lab-principles" id="methods" aria-labelledby="principles-title">
-    <div>
-      <p class="section-number">THE LAB CONTRACT</p>
-      <h2 id="principles-title">Mechanisms before leaderboards.</h2>
-    </div>
+  <section class="working-method" aria-labelledby="method-title">
+    <header>
+      <p class="section-number">METHODS</p>
+      <h2 id="method-title">Methods used here.</h2>
+    </header>
     <ol>
-      <li><span>01</span><strong>Solve what can be solved.</strong><p>Known finite environments get exact dynamic-programming baselines before training begins.</p></li>
-      <li><span>02</span><strong>Match the comparison.</strong><p>Methods share interaction budgets, seed panels, and held-out evaluation conditions.</p></li>
-      <li><span>03</span><strong>Separate design from evidence.</strong><p>Calibration shapes the protocol. Full-run artifacts support the published result.</p></li>
-      <li><span>04</span><strong>Show what would change the conclusion.</strong><p>Unresolved actions, instability, and inconvenient outcomes remain visible.</p></li>
+      <li><span>01</span><div><strong>Exact references.</strong><p>When the transition model is known, I calculate a dynamic-programming reference before training.</p></div></li>
+      <li><span>02</span><div><strong>Matched comparisons.</strong><p>Methods use the same interaction budgets, seed panels, and held-out evaluation conditions.</p></div></li>
+      <li><span>03</span><div><strong>Pilot and full-run roles.</strong><p>Pilot runs calibrate the protocol. Only the declared full runs support reported results.</p></div></li>
+      <li><span>04</span><div><strong>Exceptions and failures.</strong><p>Instability, unresolved actions, failed trials, and results that complicate the summary remain visible.</p></div></li>
     </ol>
+    <a class="text-link" href="/methods/">Read the methods <span aria-hidden="true">→</span></a>
   </section>
 
   <section class="research-ledger" aria-labelledby="ledger-title">
-    <div>
-      <p class="section-number">REPRODUCIBILITY LEDGER</p>
-      <h2 id="ledger-title">Evidence has a paper trail.</h2>
-    </div>
-    <div class="ledger-card">
-      <div><small>Study</small><strong>Shortcut or Shelter?</strong></div>
-      <div><small>Exact model</small><strong>Complete</strong></div>
-      <div><small>Full artifacts</small><strong class="pending">Collected · validating</strong></div>
-      <div><small>Public result</small><strong>Withheld</strong></div>
-    </div>
+    <header>
+      <p class="section-number">EXPERIMENTS</p>
+      <h2 id="ledger-title">Experiment log.</h2>
+    </header>
+    <a class="ledger-row" href={shortcutOrShelter.slug}>
+      <span>{shortcutOrShelter.number}</span>
+      <strong>{shortcutOrShelter.title}</strong>
+      <span>{shortcutOrShelter.date}</span>
+      <span class="pending">{shortcutOrShelter.status}</span>
+      <span aria-hidden="true">→</span>
+    </a>
   </section>
 </BaseLayout>
