@@ -1,0 +1,18 @@
+---
+const pathname = Astro.url.pathname;
+---
+
+<header class="site-header">
+  <a class="brand" href="/" aria-label="Independent Reinforcement Learning Lab home">
+    <span class="brand-mark"><strong>IRL</strong><em>LAB</em></span>
+    <span class="brand-long">Independent Reinforcement Learning Lab</span>
+  </a>
+  <nav aria-label="Primary navigation">
+    <a href="/" aria-current={pathname === "/" ? "page" : undefined}>Lab</a>
+    <a
+      href="/notes/shortcut-or-shelter/"
+      aria-current={pathname.startsWith("/notes/") ? "page" : undefined}
+    >Research note 01</a>
+    <a href="/#methods">Methods</a>
+  </nav>
+</header>

@@ -1,0 +1,50 @@
+---
+const hazards = new Set([
+  "0-2", "0-3", "0-4", "0-5", "0-6",
+  "2-2", "2-3", "2-4", "2-5", "2-6",
+]);
+const cells = Array.from({ length: 36 }, (_, index) => {
+  const row = Math.floor(index / 9);
+  const column = index % 9;
+  const key = `${row}-${column}`;
+  return {
+    row,
+    column,
+    hazard: hazards.has(key),
+    start: row === 1 && column === 0,
+    goal: row === 1 && column === 8,
+    corridor: row === 1,
+    shelter: row === 3,
+    wall: row === 3 && column >= 1 && column <= 7,
+  };
+});
+---
+
+<figure class="maze-figure">
+  <div
+    class="maze-grid"
+    role="img"
+    aria-label="Four by nine maze. The short central corridor runs east from the start to the goal and is flanked by hazards. A longer southern route is protected by a wall."
+  >
+    {cells.map((cell) => (
+      <div
+        class:list={[
+          "maze-cell",
+          { hazard: cell.hazard, corridor: cell.corridor, shelter: cell.shelter, wall: cell.wall },
+        ]}
+        aria-hidden="true"
+      >
+        {cell.start && <span class="cell-label start">S</span>}
+        {cell.goal && <span class="cell-label goal">G</span>}
+        {cell.hazard && <span class="hazard-mark">×</span>}
+      </div>
+    ))}
+    <span class="route-label corridor-label" aria-hidden="true">SHORTCUT</span>
+    <span class="route-label shelter-label" aria-hidden="true">SHELTER</span>
+  </div>
+  <figcaption>
+    <span><i class="legend-swatch corridor-swatch"></i> exposed corridor</span>
+    <span><i class="legend-swatch shelter-swatch"></i> protected route</span>
+    <span><i class="legend-swatch hazard-swatch"></i> hazard cells</span>
+  </figcaption>
+</figure>

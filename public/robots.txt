@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://irl-lab.starvaggi.us/sitemap-index.xml

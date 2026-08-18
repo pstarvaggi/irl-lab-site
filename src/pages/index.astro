@@ -1,0 +1,80 @@
+---
+import ExperimentMap from "../components/ExperimentMap.astro";
+import BaseLayout from "../layouts/BaseLayout.astro";
+
+const title = "Independent Reinforcement Learning Lab";
+const description = "Exact-first research notes and reproducible reinforcement-learning experiments by Patrick Starvaggi.";
+---
+
+<BaseLayout title={title} description={description} canonicalPath="/">
+  <section class="home-hero">
+    <div class="eyebrow"><span>IRL LAB / FIELD NOTE 001</span><span>EST. 2026</span></div>
+    <h1>Small worlds.<br /><em>Hard questions.</em></h1>
+    <div class="hero-deck">
+      <p>
+        A personal laboratory for rebuilding reinforcement learning from first
+        principles—one controlled environment, exact baseline, and honest uncertainty
+        statement at a time.
+      </p>
+      <div class="study-status" aria-label="Current study status">
+        <span class="status-dot"></span>
+        <div>
+          <strong>Study 01 is running</strong>
+          <small>Exact analysis complete · empirical conclusions withheld</small>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="featured-study" aria-labelledby="featured-title">
+    <div class="feature-copy">
+      <p class="section-number">01 / CURRENT STUDY</p>
+      <h2 id="featured-title">Shortcut<br />or shelter?</h2>
+      <p class="feature-lede">
+        A noisy corridor is fast. A southern route is longer but protected. Where does
+        the optimal route switch—and does a learning algorithm target the same boundary
+        when exploration continues?
+      </p>
+      <div class="chip-row" aria-label="Study methods">
+        <span>Q-learning</span><span>SARSA</span><span>Expected SARSA</span>
+      </div>
+      <a class="text-link" href="/notes/shortcut-or-shelter/">
+        Read the live research scaffold <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+    <div class="feature-visual">
+      <ExperimentMap />
+      <div class="visual-note">
+        <span>Known dynamics</span>
+        <span>Two consequence laws</span>
+        <span>Paired seed panel</span>
+      </div>
+    </div>
+  </section>
+
+  <section class="lab-principles" id="methods" aria-labelledby="principles-title">
+    <div>
+      <p class="section-number">THE LAB CONTRACT</p>
+      <h2 id="principles-title">Mechanisms before leaderboards.</h2>
+    </div>
+    <ol>
+      <li><span>01</span><strong>Solve what can be solved.</strong><p>Known finite environments get exact dynamic-programming baselines before training begins.</p></li>
+      <li><span>02</span><strong>Match the comparison.</strong><p>Methods share interaction budgets, seed panels, and held-out evaluation conditions.</p></li>
+      <li><span>03</span><strong>Separate design from evidence.</strong><p>Calibration shapes the protocol. Full-run artifacts support the published result.</p></li>
+      <li><span>04</span><strong>Show what would change the conclusion.</strong><p>Unresolved actions, instability, and inconvenient outcomes remain visible.</p></li>
+    </ol>
+  </section>
+
+  <section class="research-ledger" aria-labelledby="ledger-title">
+    <div>
+      <p class="section-number">REPRODUCIBILITY LEDGER</p>
+      <h2 id="ledger-title">Evidence has a paper trail.</h2>
+    </div>
+    <div class="ledger-card">
+      <div><small>Study</small><strong>Shortcut or Shelter?</strong></div>
+      <div><small>Exact model</small><strong>Complete</strong></div>
+      <div><small>Full artifacts</small><strong class="pending">Pending validation</strong></div>
+      <div><small>Public result</small><strong>Withheld</strong></div>
+    </div>
+  </section>
+</BaseLayout>

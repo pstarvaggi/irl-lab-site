@@ -1,0 +1,54 @@
+---
+import SiteHeader from "../components/SiteHeader.astro";
+import "../styles/global.css";
+
+interface Props {
+  title: string;
+  description: string;
+  canonicalPath?: string;
+  article?: boolean;
+}
+
+const {
+  title,
+  description,
+  canonicalPath = Astro.url.pathname,
+  article = false,
+} = Astro.props;
+const canonical = new URL(canonicalPath, Astro.site);
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <meta name="generator" content={Astro.generator} />
+    <meta name="theme-color" content="#f3efe6" />
+    <meta name="description" content={description} />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:type" content={article ? "article" : "website"} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:site_name" content="Independent Reinforcement Learning Lab" />
+    <meta name="twitter:card" content="summary" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <title>{title}</title>
+  </head>
+  <body>
+    <a class="skip-link" href="#content">Skip to content</a>
+    <div class="site-shell">
+      <SiteHeader />
+      <main id="content">
+        <slot />
+      </main>
+      <footer class="site-footer">
+        <p>Independent Reinforcement Learning Lab</p>
+        <p>Small environments. Exact baselines. Reproducible experiments.</p>
+        <p class="footer-meta">A personal research project by Patrick Starvaggi.</p>
+      </footer>
+    </div>
+  </body>
+</html>
