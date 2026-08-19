@@ -1,5 +1,6 @@
 ---
 import ExperimentMap from "../../../components/ExperimentMap.astro";
+import Experiment001Results from "../../../components/Experiment001Results.astro";
 import Math from "../../../components/Math.astro";
 import { shortcutOrShelter as experiment } from "../../../data/experiments";
 import BaseLayout from "../../../layouts/BaseLayout.astro";
@@ -38,10 +39,10 @@ const description =
     </header>
 
     <aside class="study-notice" aria-labelledby="study-status-title">
-      <p id="study-status-title">DATA COLLECTED · ANALYSIS PENDING</p>
+      <p id="study-status-title">RESULTS PUBLISHED · 19 AUG 2026</p>
       <div>
-        <strong>This version reports the model and protocol. Empirical estimates are pending artifact validation.</strong>
-        <span>All {experiment.totalTrials.toLocaleString("en-US")} planned trials completed. Empirical figures remain withheld until the checks below pass.</span>
+        <strong>The continuation objective predicted the ordering. Finite training did not reproduce every exact boundary, and annealing did not erase the separation.</strong>
+        <span>{experiment.primaryTrials.toLocaleString("en-US")} primary policies and {experiment.sensitivityTrials} annealing checks; all received the declared 100,000-interaction budget.</span>
       </div>
     </aside>
 
@@ -265,60 +266,30 @@ const description =
       </div>
     </section>
 
-    <section class="article-section pending-section" aria-labelledby="results-title">
-      <div class="section-rail"><span>08</span><p>EMPIRICAL RESULTS</p></div>
-      <div class="prose">
-        <p class="table-label">VALIDATION IN PROGRESS</p>
-        <h2 id="results-title">Empirical figures are still withheld.</h2>
-        <p>
-          All {experiment.totalTrials.toLocaleString("en-US")} planned trials reached
-          succeeded manifest states, with zero recorded failures. I am checking
-          completeness, evaluation pairing, and late-training stability before
-          reporting the learned boundaries.
-        </p>
-        <p>The empirical figures remain unpublished until these checks pass:</p>
-        <ul class="check-list">
-          <li>artifact and manifest integrity;</li>
-          <li>exactly 100,000 interactions in every trial;</li>
-          <li>matched held-out evaluation seeds across policy modes;</li>
-          <li>late-training route stability at calibration endpoints;</li>
-          <li>the frequency of 250-step truncations;</li>
-          <li>explicit reporting of nonmonotone learned curves;</li>
-          <li>right-censoring when a 50% boundary is absent from the grid;</li>
-          <li>confirmation that no Quick-mode output enters the analysis.</li>
-        </ul>
-        <p>
-          At each reliability value, a trained greedy policy makes a discrete start-state
-          choice. The final fraction will describe disagreement across independently
-          trained policies; it is not a stochastic mixture used by one policy.
-        </p>
-      </div>
-      <aside class="planned-evidence">
-        <p>PLANNED EVIDENCE</p>
-        <ol>
-          <li>Seed-level corridor selection</li>
-          <li>Boundary estimates and uncertainty</li>
-          <li>Movement over training</li>
-          <li>Greedy versus continuing-behavior returns</li>
-          <li>Deployment regret and hazard exposure</li>
-          <li>Policy atlas and declared-seed rollouts</li>
-        </ol>
-      </aside>
-    </section>
+    <Experiment001Results />
 
     <section class="article-section" aria-labelledby="limits-title">
       <div class="section-rail"><span>09</span><p>LIMITS</p></div>
       <div class="prose">
-        <h2 id="limits-title">What the evidence can support.</h2>
+        <h2 id="limits-title">A narrow result in a known world.</h2>
         <p>
-          The final result will be conditional on the topology, reward law, discount,
-          exploration rule, initialization, and 100,000-transition budget. It will not
-          establish that SARSA is universally safer, that Q-learning is inherently
-          reckless, or that one method is generally superior.
+          At constant ε = 0.10, methods that valued different continuation policies
+          learned different route boundaries. The ordering followed the exact model;
+          the finite-budget locations did not always coincide with it. That is the
+          result. It does not establish that SARSA is generally safer, that Q-learning
+          is inherently reckless, or that one method is superior.
         </p>
         <p>
-          The EAST/SOUTH summary is also restricted to the plotted high-reliability
-          domain. At sufficiently poor control, NORTH or WEST can become exact-optimal.
+          The failed annealing prediction matters. Turning exploration down did not
+          guarantee recovery of the common greedy route after 100,000 interactions.
+          Coverage, constant-step-size behavior, and the path taken through training
+          remain plausible explanations; this experiment does not separate them.
+        </p>
+        <p>
+          Every estimate is conditional on this topology, reward law, discount,
+          exploration schedule, initialization, reliability grid, and training budget.
+          The EAST/SOUTH summary is restricted to the plotted high-reliability domain.
+          The single learned WEST action is retained rather than folded into either route.
         </p>
       </div>
     </section>
@@ -331,10 +302,14 @@ const description =
         <p class="hash"><code>{experiment.gitCommit}</code></p>
         <p>
           Environment, agents, exact solvers, protocol, versioned configurations, and
-          the generated analysis notebook are public. Raw Protocol-v2 artifacts remain
-          local while validation is underway; the published record will include curated
-          tables, figures, manifests, provenance, and compact data sufficient to
-          reconstruct every reported statistic.
+          the generated analysis notebook are public. The analysis record includes
+          source-run hashes, settings, software versions, the post-collection amendment,
+          and hashes for every derived artifact. Raw Protocol-v2 runs remain local due
+          to size; the compact boundary table and publication figures are available here.
+        </p>
+        <p class="figure-downloads">
+          <a href={experiment.results.boundaryData} download>Boundary estimates (CSV)</a>
+          <a href={experiment.results.analysisManifest} download>Analysis record (JSON)</a>
         </p>
         <a class="text-link" href="https://github.com/pstarvaggi/independent-rl-lab">Open the repository <span aria-hidden="true">↗</span></a>
       </div>

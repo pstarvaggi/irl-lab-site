@@ -1,0 +1,213 @@
+---
+import { shortcutOrShelter as experiment } from "../data/experiments";
+
+const { results } = experiment;
+---
+
+<section class="article-section results-section" aria-labelledby="results-title">
+  <div class="section-rail"><span>08</span><p>EMPIRICAL RESULTS</p></div>
+  <div class="prose">
+    <p class="table-label">FULL RUNS · {experiment.primaryTrials.toLocaleString("en-US")} INDEPENDENT POLICIES</p>
+    <h2 id="results-title">The learned boundary depends on the backup.</h2>
+    <p class="result-lead">
+      In the recoverable maze, the corridor crossed 50% of seeds at p = 0.823 for
+      Q-learning, 0.848 for SARSA, and 0.853 for Expected SARSA. In the lethal maze,
+      Q-learning crossed only at p = 0.999; neither on-policy method crossed at all.
+    </p>
+    <p>
+      Each point below is the fraction of 20 independently trained policies whose
+      final greedy start action was EAST. The line is not one policy mixing routes;
+      it records disagreement across seeds after the same 100,000-interaction budget.
+      The stationary ordering matches the continuation objective in the update; it is
+      not a general ordering of the algorithms.
+    </p>
+  </div>
+
+  <figure class="results-figure">
+    <img
+      src={results.routeSelectionFigure}
+      alt="Corridor-selection rates across reliability for Q-learning, SARSA, and Expected SARSA in recoverable and lethal hazard conditions"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption>
+      <strong>Figure 2.</strong> Final route selection by reliability, with 95% Wilson
+      intervals across 20 training seeds. Vertical references mark the exact greedy
+      and persistent-ε boundaries. An empirical boundary is the 50% crossing of the
+      seed-level corridor-selection curve.
+      <span class="figure-downloads">
+        <a href={results.routeSelectionFigure} download>Figure (SVG)</a>
+        <a href={results.boundaryData} download>Boundary data (CSV)</a>
+      </span>
+    </figcaption>
+  </figure>
+
+  <div class="prose result-summary">
+    <p>
+      In the recoverable maze, the seed-paired median boundary shift relative to
+      Q-learning was +0.026 for SARSA (95% interval [0.015, 0.0395]) and +0.0305 for
+      Expected SARSA ([0.015, 0.0397]). The lethal on-policy boundaries were
+      right-censored, so no numerical shift is imputed there.
+    </p>
+  </div>
+
+  <div class="boundary-table-wrap" role="region" aria-label="Learned route boundaries" tabindex="0">
+    <p class="table-label">MODEL TARGETS AND FINITE-BUDGET ESTIMATES</p>
+    <table class="boundary-table">
+      <thead>
+        <tr>
+          <th scope="col">Hazard</th>
+          <th scope="col">Method</th>
+          <th scope="col">Exact target</th>
+          <th scope="col">Learned p50 boundary</th>
+          <th scope="col">Reading</th>
+        </tr>
+      </thead>
+      <tbody>
+        {results.boundaryRows.map((row) => (
+          <tr>
+            <td>{row.hazard}</td>
+            <td><strong>{row.algorithm}</strong></td>
+            <td>{row.modelTarget}</td>
+            <td><strong>{row.learnedBoundary}</strong></td>
+            <td>{row.reading}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="boundary-key">
+      Intervals resample training seeds as the independent unit. “No crossing” means
+      the observed corridor-selection rate did not reach 50% on the declared grid;
+      it is not extrapolated beyond the data.
+    </p>
+  </div>
+
+  <aside class="consequence-checks" aria-label="Consequences of learned route choice">
+    <article>
+      <p class="table-label">RECOVERABLE · p = 0.825 · FROZEN GREEDY</p>
+      <h3>Route choice changed exposure.</h3>
+      <p>
+        Mean return (95% seed interval) was 6.925 [6.866, 6.987] for Q-learning,
+        7.040 [6.981, 7.090] for SARSA, and 7.044 [7.003, 7.081] for Expected SARSA.
+        Hazard-penalty contacts per 1,000 steps were 50.76 [32.95, 68.25], 15.50
+        [5.62, 27.90], and 15.80 [6.99, 26.90], respectively.
+      </p>
+    </article>
+    <article>
+      <p class="table-label">LETHAL · p = 1 · TWO EVALUATION POLICIES</p>
+      <h3>Exploration changed the comparison.</h3>
+      <p>
+        Frozen greedy policies had zero failures; Q-learning returned 7.52 against
+        7.28 for both on-policy methods. With ε = 0.10 still active, Q-learning
+        returned 3.787 [3.176, 4.389] with a 0.234 [0.196, 0.274] failure rate,
+        versus 7.171 [7.103, 7.208] and 0.002 [0, 0.006] for SARSA, and 7.144
+        [7.045, 7.211] and 0.004 [0, 0.010] for Expected SARSA.
+      </p>
+    </article>
+  </aside>
+
+  <div class="result-subhead">
+    <p class="table-label">MECHANISM CHECKS</p>
+    <h3>One mechanism survived its check. One did not.</h3>
+    <p>
+      These checks separate two claims. Expected SARSA should remove next-action
+      sampling variance at a matched backup. Annealing ε to zero should make the
+      trained policies approach the same greedy route. Only the first held here.
+    </p>
+  </div>
+
+  <figure class="results-figure">
+    <img
+      src={results.mechanismFigure}
+      alt="Mechanism checks comparing backup-target variance and route selection after exploration anneals"
+      loading="lazy"
+      decoding="async"
+    />
+    <figcaption>
+      <strong>Figure 3.</strong> Route choice at the two declared annealing points and
+      exact backup-target variance at matched states and Q-values. Annealing did not
+      make all three methods recover the common greedy route at this budget.
+      <span class="figure-downloads">
+        <a href={results.mechanismFigure} download>Figure (SVG)</a>
+        <a href={results.analysisManifest} download>Analysis record (JSON)</a>
+      </span>
+    </figcaption>
+  </figure>
+
+  <div class="claim-adjudication" aria-label="Prediction outcomes">
+    <article>
+      <p class="claim-status">Mixed</p>
+      <h3>Q-learning and the greedy reference</h3>
+      <p>
+        Q-learning was the first method to cross toward the corridor in both hazard
+        laws, as predicted. Its learned boundaries remained 0.017 and 0.010 above the
+        exact greedy references, so the objective ordering was right but exact recovery
+        was not.
+      </p>
+    </article>
+    <article>
+      <p class="claim-status">Supported in ordering</p>
+      <h3>On-policy methods and the ε-soft reference</h3>
+      <p>
+        Recoverable-hazard boundaries landed at 0.848 and 0.853 against an exact
+        ε-soft boundary of 0.848. Under lethal hazards, both methods remained below
+        50% corridor selection, as the no-crossing reference predicted.
+      </p>
+    </article>
+    <article>
+      <p class="claim-status">Supported</p>
+      <h3>Expected backup and target variance</h3>
+      <p>
+        At the declared comparison points, variance fell from 0.0154 to 0.0088 in the
+        recoverable maze and from 0.0382 to zero in the lethal maze. The reduction is
+        exactly the next-action sampling component; it is not a sample-efficiency claim.
+      </p>
+    </article>
+    <article>
+      <p class="claim-status">Not supported</p>
+      <h3>Annealing and the common objective</h3>
+      <p>
+        Removing exploration did not erase the learned separation after 100,000
+        interactions. At recoverable p = 0.825, corridor choice was 1/12 for Q-learning,
+        2/12 for SARSA, and 2/12 for Expected SARSA; at lethal p = 1, it was 12/12,
+        0/12, and 11/12. The exact common greedy optimum remains; this annealing
+        procedure did not recover it reliably.
+      </p>
+    </article>
+  </div>
+
+  <aside class="analysis-amendment" aria-labelledby="amendment-title">
+    <p id="amendment-title">Analysis amendment · 19 Aug 2026</p>
+    <div>
+      <p>
+        The original executable gate stopped if any final start action was tied or
+        off-route. It stopped on one WEST action among {results.unresolvedPolicyTotal.toLocaleString("en-US")} primary policies:
+        lethal SARSA at p = 0.99, seed 10. That all-or-nothing gate conflicted with the
+        declared three-outcome estimand, which already retained <code>other</code>.
+      </p>
+      <p>
+        Before inspecting the boundary estimates, I amended the gate to preserve and
+        report <code>other</code>, and to fail only when unresolved actions exceeded 20%
+        within a condition. The observed rate was {results.unresolvedPolicyCount} of {results.unresolvedPolicyTotal.toLocaleString("en-US")}
+        overall; the exception remains in the published data.
+      </p>
+    </div>
+  </aside>
+
+  <aside class="validation-record" aria-labelledby="validation-title">
+    <p id="validation-title">Validation record</p>
+    <div>
+      <p>
+        Artifact integrity, 100,000-interaction budgets, endpoint calibration,
+        late-training stability, and the amended unresolved-action gate all passed.
+        A strict nonblocking diagnostic found 3 time-limit truncations among 96,000
+        held-out episodes (0.003125%), all from the single off-route policy noted above.
+        They remain in the summaries and do not alter the primary start-action estimand.
+      </p>
+      <p>
+        No Quick-mode artifact is included. All reported uncertainty treats training
+        seeds—not held-out episodes—as the independent units.
+      </p>
+    </div>
+  </aside>
+</section>
