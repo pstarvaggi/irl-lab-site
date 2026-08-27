@@ -1,0 +1,302 @@
+---
+import Math from "../../../components/Math.astro";
+import { timingOfBadLuck as study } from "../../../data/experiments";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const title = "The timing of bad luck | Independent Reinforcement Learning Lab";
+const description =
+  "A controlled study of how event timing, step-size rules, and one-step TD backup depth determine whether one adverse outcome changes a finite-budget policy.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={study.slug}
+  article
+  published="2026-08-27"
+  updated={study.updated}
+>
+  <article class="research-note">
+    <header class="article-hero">
+      <div class="article-meta">
+        <span>{study.kind.toUpperCase()} {study.number}</span>
+        <span>27 AUGUST 2026</span>
+        <span>MECHANISM STUDY</span>
+      </div>
+      <h1>The timing <em>of bad luck.</em></h1>
+      <p class="article-deck">{study.subtitle}</p>
+      <p class="article-standfirst">
+        A bad result can change what an agent samples next. This note isolates how
+        the time of that result, the learning-rate rule, and the number of TD backups
+        between outcome and choice determine whether the agent ends with the wrong policy.
+      </p>
+      <div class="article-byline">
+        <span>Patrick Starvaggi</span>
+        <span>8 minute read</span>
+      </div>
+    </header>
+
+    <aside class="study-notice" aria-labelledby="study-status-title">
+      <p id="study-status-title">RESULTS PUBLISHED · 27 AUG 2026</p>
+      <div>
+        <strong>One adverse terminal outcome produced a timing window whose shape reversed with the step-size rule and changed sharply with route depth.</strong>
+        <span>Exact depth-one calculation; 20,000 paired seeds per simulated point; complete analysis in under 30 seconds.</span>
+      </div>
+    </aside>
+
+    <section class="article-section" aria-labelledby="question-title">
+      <div class="section-rail"><span>01</span><p>THE QUESTION</p></div>
+      <div class="prose">
+        <h2 id="question-title">Bad evidence changes future evidence.</h2>
+        <p class="lead">
+          A learner does not passively receive a fixed dataset. What it currently
+          believes changes what it chooses, and therefore what it gets to observe next.
+        </p>
+        <p>
+          An adverse result on a promising route can make that route non-greedy. If
+          exploration is already declining, the agent may then stop collecting the
+          observations required to correct the estimate. The broad phenomenon is known
+          as the <em>hot-stove effect</em>; it was described in adaptive learning well
+          before this note. <a href="https://pubsonline.informs.org/doi/10.1287/orsc.12.5.523.10092">Denrell and March</a>
+          showed how bad samples can suppress the sampling that would undo an
+          underestimate, and <a href="https://pubmed.ncbi.nlm.nih.gov/22924882/">Shteingart, Neiman, and Loewenstein</a>
+          measured lasting first-outcome effects in human choice.
+        </p>
+        <p class="research-question"><strong>Question.</strong> Under a fixed training budget, when does one adverse terminal outcome have the greatest chance of changing the final greedy policy?</p>
+        <p>
+          The existence of path dependence is not the claim. The narrower object here
+          is its timing profile, and how that profile changes when the estimator carries
+          prior evidence differently and the outcome is several TD backups away from the choice.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="world-title">
+      <div class="section-rail"><span>02</span><p>THE INTERVENTION</p></div>
+      <div class="prose">
+        <h2 id="world-title">One choice, one controlled shock.</h2>
+        <p>
+          At the start, the agent chooses between two routes. The safe route terminates
+          immediately for <Math tex="s=0.9" />. The risky route enters a deterministic
+          chain and ordinarily terminates for <Math tex="g=1" />. Its depth
+          <Math tex="d\in\{1,3,6\}" /> counts the state-action values from the start
+          decision through the terminal predecessor. There are no later choices, and
+          <Math tex="\gamma=1" />. The risky route is therefore truly optimal at every depth.
+        </p>
+        <p>
+          Before an event at training round <Math tex="\tau" />, I calibrate exactly
+          <Math tex="n=\tau" /> successful risky traversals. The risky values equal one
+          and their visit counts equal <Math tex="n" />. I then force the risky route
+          once. The treatment receives <Math tex="b=-5" /> at the terminal transition;
+          its paired control receives the ordinary reward one. Every later risky outcome
+          is again one, and the two arms share the same future random numbers.
+        </p>
+        <p>
+          This is an impulse response, not a simulation that waits for a rare event to
+          occur naturally. If the bad reward arose with probability <Math tex="p" /> in
+          a stationary reward distribution, the risky route would still have the higher
+          mean whenever <Math tex="p<1/60" />. Here I condition on one event so its
+          causal effect can be estimated without a giant rare-event sweep.
+        </p>
+      </div>
+      <dl class="protocol-grid">
+        <div><dt>Training horizon</dt><dd>200 route choices</dd></div>
+        <div><dt>Exploration</dt><dd>ε: 0.40 → 0.01</dd></div>
+        <div><dt>Step sizes</dt><dd>1 / N and α = 0.20</dd></div>
+        <div><dt>Paired samples</dt><dd>20,000 per point</dd></div>
+      </dl>
+      <div class="prose">
+        <p>
+          The outcome is finite-budget policy error: the probability that the treated
+          learner finishes safe-greedy while its paired ordinary-outcome control remains
+          risky-greedy. “Lock-in” below always means this operational, finite-horizon event.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="exact-title">
+      <div class="section-rail"><span>03</span><p>THE EXACT CASE</p></div>
+      <div class="prose">
+        <h2 id="exact-title">At depth one, recovery can be counted.</h2>
+        <p>
+          Suppose the adverse result follows <Math tex="n" /> ordinary risky outcomes
+          and is followed by <Math tex="k" /> more. Under a sample-average update,
+        </p>
+        <Math display tex="\bar q_{n,k}=\frac{(n+k)g+b}{n+k+1}." />
+        <p>The number of later risky visits required to make that action greedy again is</p>
+        <Math display tex="k_{\mathrm{avg}}(n)=\max\!\left(0,\left\lfloor\frac{s-b}{g-s}\right\rfloor+1-n\right)." />
+        <p>
+          For the displayed rewards this is <Math tex="\max(0,60-n)" />. Accumulated
+          evidence eventually makes one late loss too small to reverse the ranking.
+        </p>
+        <p>With a constant step size, the event instead moves the estimate to</p>
+        <Math display tex="q_0=(1-\alpha)g+\alpha b," />
+        <p>and after <Math tex="k" /> later ordinary outcomes,</p>
+        <Math display tex="q_k=g-(g-q_0)(1-\alpha)^k." />
+        <p>
+          At <Math tex="\alpha=0.2" />, recovery always requires 12 risky visits,
+          regardless of how much evidence preceded the event.
+        </p>
+        <p>
+          While risky is non-greedy, its possible recovery visits over the remaining
+          horizon are
+        </p>
+        <Math display tex="X_\tau=\sum_{t=\tau+1}^{T-1}\operatorname{Bernoulli}\!\left(\epsilon_t/2\right)." />
+        <p>
+          Because epsilon changes with time, <Math tex="X_\tau" /> is Poisson-binomial.
+          For update rule <Math tex="u" />, the exact depth-one error probability is
+        </p>
+        <Math display tex="\Pr(\text{lock-in}\mid\tau,u)=\Pr(X_\tau<k_u)." />
+        <p>
+          The recovery counts are equal after 48 prior successes. Before that point,
+          sample averaging is more vulnerable; afterward, constant alpha is more
+          vulnerable. The ordering follows from the recovery thresholds and does not
+          depend on the particular epsilon schedule. The probability levels do.
+        </p>
+      </div>
+      <div class="exact-table-wrap" role="region" aria-label="Exact depth-one lock-in probabilities" tabindex="0">
+        <p class="table-label">EXACT DEPTH-ONE CALCULATION · b = −5</p>
+        <table class="exact-table">
+          <thead><tr><th scope="col">Event round</th><th scope="col">Sample average</th><th scope="col">Constant α</th></tr></thead>
+          <tbody>
+            <tr><td>0</td><td><strong>1.000</strong></td><td><strong>0.013</strong></td></tr>
+            <tr><td>48</td><td><strong>0.473</strong></td><td><strong>0.473</strong></td></tr>
+            <tr><td>60</td><td><strong>0.000</strong></td><td><strong>0.692</strong></td></tr>
+            <tr><td>100</td><td><strong>0.000</strong></td><td><strong>0.994</strong></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="depth-title">
+      <div class="section-rail"><span>04</span><p>THE SECOND CLOCK</p></div>
+      <div class="prose">
+        <h2 id="depth-title">A terminal outcome must reach the choice.</h2>
+        <p>
+          One-step TD updates the risky chain online in forward order. In the adverse
+          traversal, earlier links bootstrap from successors that have not yet received
+          the bad target. Only the terminal predecessor changes immediately. Additional
+          risky traversals are required for the shock to travel back to the start.
+        </p>
+        <p>
+          This creates two clocks. The first governs propagation of the loss to the
+          start decision. The second governs propagation of later ordinary outcomes that
+          repair the estimate. Once the start becomes safe-greedy, the route traversals
+          needed for repair arrive primarily through declining exploration.
+        </p>
+      </div>
+      <figure class="wide-figure">
+        <img
+          src={study.results.figure}
+          alt="Six panels compare sample-average and constant-step-size TD. With deeper routes, constant-step-size lock-in rises across most event times, while very late shocks fail to reach the start before training ends."
+        />
+        <figcaption class="figure-caption"><strong>Figure 1.</strong> Final probability of selecting the safe, suboptimal action after one forced terminal outcome. Columns vary route depth; rows repeat the study at bad rewards −5 and −4. Lines are paired estimates and ribbons are Wilson 95% intervals.</figcaption>
+      </figure>
+      <div class="prose">
+        <p>
+          At event round 48, depth one is the analytic crossover: both rules finish
+          safe-greedy in 47.8% of paired simulations. At depth three, the corresponding
+          probabilities are 0.0% for sample averaging and 99.7% for constant alpha. At
+          depth six they are 0.0% and 100.0%.
+        </p>
+        <p>
+          The nearby <Math tex="b=-4" /> condition reproduces the separation. At its
+          depth-one crossover, round 39, the two rules both finish safe-greedy in 21.4%
+          of simulations. At depth three the probabilities are 0.0% and 95.6%; at depth
+          six, 0.0% and 99.99%.
+        </p>
+        <p>
+          Depth also creates a late propagation blind spot. With constant alpha and
+          depth six, an event at round 184 changes the final policy in 98.7% of runs.
+          At round 188 it changes none: twelve remaining rounds are insufficient for
+          the terminal target to reach the start. That zero is delayed credit, not recovery.
+        </p>
+        <p>
+          A full-return update sends the terminal outcome to every risky state in the
+          same traversal. Its curve is therefore identical to depth one at every tested
+          route depth. The change in Figure 1 comes from one-step temporal credit
+          propagation, not from adding inert states to the diagram.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="reading-title">
+      <div class="section-rail"><span>05</span><p>THE READING</p></div>
+      <div class="prose">
+        <h2 id="reading-title">Robustness and responsiveness are the same lever.</h2>
+        <p>
+          Sample averaging gives each new outcome less weight as evidence accumulates.
+          That protects a mature estimate from a late isolated shock. Across several TD
+          links, the attenuation compounds: after enough prior traversals, the terminal
+          disturbance never pushes the start value below the safe value.
+        </p>
+        <p>
+          A constant step size preserves sensitivity to new outcomes. That is useful in
+          a changing world, but here it preserves the size of the shock while the
+          remaining exploration budget contracts. Route depth delays the policy change,
+          then delays its repair even more.
+        </p>
+        <p>
+          This is not evidence that sample averages are generally better. Their immunity
+          to late evidence is also an inability to adapt quickly. Nor is constant alpha
+          intrinsically defective: the finite-horizon failure depends on an annealed
+          behavior policy that stops revisiting the demoted route.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="limits-title">
+      <div class="section-rail"><span>06</span><p>LIMITS</p></div>
+      <div class="prose">
+        <h2 id="limits-title">A controlled mechanism, not a general theory.</h2>
+        <p>
+          The safe value is known and fixed. The pre-event history contains a calibrated
+          number of successful risky traversals rather than a naturally generated
+          trajectory. Rewards and transitions are otherwise deterministic. The risky
+          chain has no decisions after the start and uses discount one.
+        </p>
+        <p>
+          The results do not establish the same timing window for eligibility traces,
+          replay, function approximation, recurrent agents, or deep RL. They also do not
+          establish novelty. Early-outcome dependence and the hot-stove effect have an
+          existing literature; deep RL has a separate, function-approximation form of
+          <a href="https://proceedings.mlr.press/v162/nikishin22a.html">primacy bias</a>.
+        </p>
+        <p>
+          The contribution of this note is deliberately smaller: an exact depth-one
+          impulse response and a paired demonstration that one-step backup depth creates
+          a propagation-and-recovery window, including a late horizon blind spot.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section reproducibility" aria-labelledby="repro-title">
+      <div class="section-rail"><span>07</span><p>REPRODUCIBILITY</p></div>
+      <div class="prose">
+        <h2 id="repro-title">One script and three compact artifacts.</h2>
+        <p>
+          The complete calculation and simulation run from one study-specific Python
+          entry point. It does not use the laboratory's experiment protocol, a notebook,
+          or raw Parquet shards. The published CSV contains every plotted estimate and
+          confidence interval; the JSON file records the intervention, parameters,
+          headline values, and deterministic propagation windows.
+        </p>
+        <p class="figure-downloads">
+          <a href={study.results.data} download>Results (CSV)</a>
+          <a href={study.results.analysis} download>Analysis record (JSON)</a>
+          <a href={study.results.figure} download>Figure (SVG)</a>
+        </p>
+        <a class="text-link" href="https://github.com/pstarvaggi/independent-rl-lab/blob/main/experiments/stochastic_maze/run_bad_luck_timing.py">Open the analysis code <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <footer class="article-closing">
+      <p>
+        The next useful test is not a larger sweep. It is to remove the calibrated
+        success history and ask whether the same timing window survives naturally
+        generated rare outcomes.
+      </p>
+      <a class="text-link" href="/experiments/">All studies →</a>
+    </footer>
+  </article>
+</BaseLayout>

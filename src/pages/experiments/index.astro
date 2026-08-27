@@ -2,21 +2,21 @@
 import { experimentIndex } from "../../data/experiments";
 import BaseLayout from "../../layouts/BaseLayout.astro";
 
-const title = "Experiments | Independent Reinforcement Learning Lab";
-const description = "A chronological record of Independent RL Lab experiments.";
+const title = "Studies | Independent Reinforcement Learning Lab";
+const description = "Research notes and calibration studies from Independent RL Lab.";
 ---
 
 <BaseLayout title={title} description={description} canonicalPath="/experiments/">
   <header class="index-hero">
     <p class="kicker">Independent RL Lab</p>
-    <h1>Experiments</h1>
-    <p>A chronological record of the experiments, including their questions, methods, status, and reproducibility materials.</p>
+    <h1>Studies</h1>
+    <p>A chronological record of research notes and calibration studies, including their questions, methods, limits, and reproducibility materials.</p>
   </header>
   <section class="experiment-index" aria-label="Experiment index">
     {experimentIndex.map((experiment) => (
       <article class="experiment-entry">
         <div class="experiment-entry-meta">
-          <span>{experiment.number}</span>
+          <span>{experiment.kind} {experiment.number}</span>
           <span>{experiment.date}</span>
           <span>{experiment.status}</span>
         </div>

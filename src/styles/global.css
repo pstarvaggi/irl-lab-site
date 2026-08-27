@@ -209,6 +209,8 @@ main:focus { outline: 0; }
   padding: clamp(36px, 5vw, 70px) 0 clamp(36px, 5vw, 70px) clamp(30px, 5vw, 72px);
   border-left: 1px solid var(--line);
 }
+.feature-visual > img,
+.wide-figure > img { display: block; width: 100%; height: auto; }
 
 .feature-copy h2,
 .working-method h2,

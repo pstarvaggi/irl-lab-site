@@ -1,5 +1,6 @@
 export const shortcutOrShelter = {
   number: "001",
+  kind: "Calibration",
   title: "Shortcut or shelter?",
   subtitle: "The policy boundary in a noisy maze",
   slug: "/experiments/001-shortcut-or-shelter/",
@@ -101,4 +102,24 @@ export const shortcutOrShelter = {
   ],
 } as const;
 
-export const experimentIndex = [shortcutOrShelter] as const;
+export const timingOfBadLuck = {
+  number: "002",
+  kind: "Research note",
+  title: "The timing of bad luck",
+  subtitle: "When one adverse outcome becomes hard to unlearn",
+  slug: "/experiments/002-timing-of-bad-luck/",
+  status: "Published",
+  statusDetail: "Research note published",
+  date: "August 2026",
+  updated: "2026-08-27",
+  description:
+    "A controlled impulse-response study of how event timing, step-size rules, and TD backup depth determine whether one adverse outcome changes the final policy.",
+  methods: ["Exact calculation", "Paired TD(0) simulation", "Common random numbers"],
+  results: {
+    figure: "/experiments/002-timing-of-bad-luck/timing-of-bad-luck.svg",
+    data: "/experiments/002-timing-of-bad-luck/results.csv",
+    analysis: "/experiments/002-timing-of-bad-luck/analysis.json",
+  },
+} as const;
+
+export const experimentIndex = [timingOfBadLuck, shortcutOrShelter] as const;

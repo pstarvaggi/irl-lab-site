@@ -1,0 +1,350 @@
+{
+  "analysis": "bad_luck_timing",
+  "analysis_schema_version": 1,
+  "analysis_source_sha256": "958863d31954575527bf0737172828ec09325221156d99aa4f7c9cda70646e82",
+  "artifacts": {
+    "figure.svg": {
+      "bytes": 95565,
+      "sha256": "a3fd23a8403be90631ecb74ec5928a8dee59d01df536329603f75f803ba17d26"
+    },
+    "results.csv": {
+      "bytes": 109785,
+      "sha256": "71e9879ef49cec5b0f6b98d9cc00678afb05fad49700252e5a40d1a4d7abd376"
+    }
+  },
+  "claim": "The lasting effect of one adverse terminal outcome depends jointly on its timing, the step-size rule, and the number of one-step TD backups between the outcome and the route choice.",
+  "config": {
+    "bad_rewards": [
+      -5.0,
+      -4.0
+    ],
+    "constant_alpha": 0.2,
+    "depths": [
+      1,
+      3,
+      6
+    ],
+    "epsilon_end": 0.01,
+    "epsilon_start": 0.4,
+    "good_reward": 1.0,
+    "horizon": 200,
+    "paired_seeds": 20000,
+    "propagation_limit": 500000,
+    "random_seed": 20260827,
+    "safe_reward": 0.9
+  },
+  "event_rounds": [
+    0,
+    4,
+    8,
+    12,
+    16,
+    20,
+    24,
+    28,
+    32,
+    36,
+    39,
+    40,
+    44,
+    48,
+    50,
+    52,
+    56,
+    60,
+    64,
+    68,
+    72,
+    76,
+    80,
+    84,
+    88,
+    92,
+    96,
+    100,
+    104,
+    108,
+    112,
+    116,
+    120,
+    124,
+    128,
+    132,
+    136,
+    140,
+    144,
+    148,
+    150,
+    152,
+    156,
+    160,
+    164,
+    168,
+    172,
+    176,
+    180,
+    184,
+    188,
+    192,
+    196,
+    199
+  ],
+  "exact_depth_one": [
+    {
+      "bad_reward": -5.0,
+      "constant_alpha_recovery_visits": 12,
+      "crossover_prior_good_traversals": 48,
+      "paired_lock_probability_at_crossover": 0.47785,
+      "sample_average_zero_history_recovery_visits": 60
+    },
+    {
+      "bad_reward": -4.0,
+      "constant_alpha_recovery_visits": 11,
+      "crossover_prior_good_traversals": 39,
+      "paired_lock_probability_at_crossover": 0.21445,
+      "sample_average_zero_history_recovery_visits": 50
+    }
+  ],
+  "full_return_comparator": "At every depth, a full-return update is algebraically identical to the reported depth-one exact calculation because it sends the terminal return directly to the start in the same episode.",
+  "headline_main_setting": {
+    "1": {
+      "0": {
+        "constant_alpha": 0.01325,
+        "sample_average": 1.0
+      },
+      "100": {
+        "constant_alpha": 0.99465,
+        "sample_average": 0.0
+      },
+      "48": {
+        "constant_alpha": 0.47785,
+        "sample_average": 0.47785
+      },
+      "60": {
+        "constant_alpha": 0.6864,
+        "sample_average": 0.0
+      }
+    },
+    "3": {
+      "0": {
+        "constant_alpha": 0.59985,
+        "sample_average": 1.0
+      },
+      "100": {
+        "constant_alpha": 1.0,
+        "sample_average": 0.0
+      },
+      "48": {
+        "constant_alpha": 0.99655,
+        "sample_average": 0.0
+      },
+      "60": {
+        "constant_alpha": 0.99975,
+        "sample_average": 0.0
+      }
+    },
+    "6": {
+      "0": {
+        "constant_alpha": 0.98985,
+        "sample_average": 1.0
+      },
+      "100": {
+        "constant_alpha": 1.0,
+        "sample_average": 0.0
+      },
+      "48": {
+        "constant_alpha": 1.0,
+        "sample_average": 0.0
+      },
+      "60": {
+        "constant_alpha": 1.0,
+        "sample_average": 0.0
+      }
+    }
+  },
+  "intervention": "After n=tau forced successful risky-chain traversals, force risky once at round tau and replace only its terminal reward by b. Resume epsilon-greedy start choices with ordinary risky reward g. The paired control receives g.",
+  "known_true_values": {
+    "risky_route_at_every_depth": 1.0,
+    "safe_route": 0.9
+  },
+  "limitations": [
+    "The intervention conditions on an exact number of prior successful risky traversals.",
+    "Rewards and transitions outside the intervention are deterministic.",
+    "The safe value is known and fixed.",
+    "The chain has no downstream decisions and uses discount one.",
+    "The result does not establish behavior under traces, replay, function approximation, or deep RL.",
+    "No novelty claim is made without a targeted literature review."
+  ],
+  "nearby_setting_at_analytic_crossover": {
+    "bad_reward": -4.0,
+    "by_depth": {
+      "1": {
+        "constant_alpha": 0.21445,
+        "sample_average": 0.21445
+      },
+      "3": {
+        "constant_alpha": 0.9561,
+        "sample_average": 0.0
+      },
+      "6": {
+        "constant_alpha": 0.9999,
+        "sample_average": 0.0
+      }
+    },
+    "event_round": 39
+  },
+  "runtime_seconds": 26.445150584040675,
+  "status": "passed",
+  "validation": {
+    "all_propagation_windows_uncensored": true,
+    "common_random_numbers": true,
+    "depth_one_error_limit": 0.02,
+    "max_absolute_depth_one_mc_error": 0.0051279345588824965
+  },
+  "zero_history_propagation_windows": [
+    {
+      "bad_reward": -5.0,
+      "censored": false,
+      "depth": 1,
+      "first_unsafe_risky_visit": 0,
+      "last_unsafe_risky_visit": 59,
+      "minimum_at_risky_visit": 0,
+      "minimum_start_value": -5.0,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 60,
+      "update_rule": "sample_average"
+    },
+    {
+      "bad_reward": -5.0,
+      "censored": false,
+      "depth": 1,
+      "first_unsafe_risky_visit": 0,
+      "last_unsafe_risky_visit": 11,
+      "minimum_at_risky_visit": 0,
+      "minimum_start_value": -0.19999999999999996,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 12,
+      "update_rule": "constant_alpha"
+    },
+    {
+      "bad_reward": -5.0,
+      "censored": false,
+      "depth": 3,
+      "first_unsafe_risky_visit": 2,
+      "last_unsafe_risky_visit": 1941,
+      "minimum_at_risky_visit": 7,
+      "minimum_start_value": -0.9541666666666666,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 1940,
+      "update_rule": "sample_average"
+    },
+    {
+      "bad_reward": -5.0,
+      "censored": false,
+      "depth": 3,
+      "first_unsafe_risky_visit": 3,
+      "last_unsafe_risky_visit": 23,
+      "minimum_at_risky_visit": 9,
+      "minimum_start_value": 0.6376121344000001,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 21,
+      "update_rule": "constant_alpha"
+    },
+    {
+      "bad_reward": -5.0,
+      "censored": false,
+      "depth": 6,
+      "first_unsafe_risky_visit": 9,
+      "last_unsafe_risky_visit": 130293,
+      "minimum_at_risky_visit": 203,
+      "minimum_start_value": -0.13158237410624365,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 130285,
+      "update_rule": "sample_average"
+    },
+    {
+      "bad_reward": -5.0,
+      "censored": false,
+      "depth": 6,
+      "first_unsafe_risky_visit": 14,
+      "last_unsafe_risky_visit": 40,
+      "minimum_at_risky_visit": 24,
+      "minimum_start_value": 0.7647818769673147,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 27,
+      "update_rule": "constant_alpha"
+    },
+    {
+      "bad_reward": -4.0,
+      "censored": false,
+      "depth": 1,
+      "first_unsafe_risky_visit": 0,
+      "last_unsafe_risky_visit": 49,
+      "minimum_at_risky_visit": 0,
+      "minimum_start_value": -4.0,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 50,
+      "update_rule": "sample_average"
+    },
+    {
+      "bad_reward": -4.0,
+      "censored": false,
+      "depth": 1,
+      "first_unsafe_risky_visit": 0,
+      "last_unsafe_risky_visit": 10,
+      "minimum_at_risky_visit": 0,
+      "minimum_start_value": 0.0,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 11,
+      "update_rule": "constant_alpha"
+    },
+    {
+      "bad_reward": -4.0,
+      "censored": false,
+      "depth": 3,
+      "first_unsafe_risky_visit": 2,
+      "last_unsafe_risky_visit": 1519,
+      "minimum_at_risky_visit": 7,
+      "minimum_start_value": -0.6284722222222223,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 1518,
+      "update_rule": "sample_average"
+    },
+    {
+      "bad_reward": -4.0,
+      "censored": false,
+      "depth": 3,
+      "first_unsafe_risky_visit": 4,
+      "last_unsafe_risky_visit": 22,
+      "minimum_at_risky_visit": 9,
+      "minimum_start_value": 0.698010112,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 19,
+      "update_rule": "constant_alpha"
+    },
+    {
+      "bad_reward": -4.0,
+      "censored": false,
+      "depth": 6,
+      "first_unsafe_risky_visit": 10,
+      "last_unsafe_risky_visit": 94816,
+      "minimum_at_risky_visit": 203,
+      "minimum_start_value": 0.057014688244796906,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 94807,
+      "update_rule": "sample_average"
+    },
+    {
+      "bad_reward": -4.0,
+      "censored": false,
+      "depth": 6,
+      "first_unsafe_risky_visit": 15,
+      "last_unsafe_risky_visit": 38,
+      "minimum_at_risky_visit": 24,
+      "minimum_start_value": 0.8039848974727622,
+      "prior_good_traversals": 0,
+      "unsafe_window_visits": 24,
+      "update_rule": "constant_alpha"
+    }
+  ]
+}
