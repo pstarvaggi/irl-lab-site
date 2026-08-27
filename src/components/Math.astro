@@ -15,11 +15,12 @@ const html = katex.renderToString(tex, {
   throwOnError: true,
   strict: "warn",
 });
-const Tag = display ? "div" : "span";
 ---
 
-<Tag
-  class:list={[display ? "math-display" : "math-inline"]}
-  aria-label={label}
-  set:html={html}
-/>
+{display ? (
+  <div class="math-display" aria-label={label} set:html={html} />
+) : (
+  <>
+    {" "}<span class="math-inline" aria-label={label} set:html={html} />
+  </>
+)}
