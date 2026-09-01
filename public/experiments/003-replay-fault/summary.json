@@ -1,0 +1,133 @@
+{
+  "aggregate_artifact_version": 1,
+  "created_at": "2026-08-31T19:51:23.789494Z",
+  "decision": {
+    "compute_budget_gate": {
+      "reason": "phase-two design and its projected local or external compute must be reviewed separately; this result cannot authorize that work",
+      "status": "pending"
+    },
+    "conditions": {
+      "clean_continuation_health": {
+        "clean_roots_passing": 6,
+        "clean_roots_required": 5,
+        "definition": "zero clean capped evaluation episodes and post-eviction clean time-average return at least 1.976",
+        "passed": true,
+        "technically_verified_pairs": 6
+      },
+      "complete_locked_dose": {
+        "complete_pairs": 6,
+        "locked_dose": 16,
+        "locked_dose_pairs": 6,
+        "passed": true,
+        "required_pairs": 6
+      },
+      "learned_at_fork": {
+        "excluded_calibration_mean": 12.4,
+        "minimum_mean": 1.976,
+        "passed": true,
+        "pilot_roots_passing": 6,
+        "pilot_roots_required": 5
+      },
+      "median_post_eviction_debt": {
+        "median": 0.011470579765113571,
+        "minimum": 0.1,
+        "passed": false
+      },
+      "positive_post_eviction_debt": {
+        "passed": false,
+        "positive_pairs": 3,
+        "required_pairs": 5
+      }
+    },
+    "empirical_gate_passed": false,
+    "outcome": "stop-or-redesign",
+    "scope": "six-root diagnostic gate; descriptive and not confirmatory"
+  },
+  "inputs": [
+    {
+      "analysis_completion_sha256": "e5347d54a7b90016bcf99189c97c2369f5694943efad55a13c1262834b7d309f",
+      "analysis_source_sha256": "3ab823aa9c2a2b1e9ac480cf5b4d421da618e5ff2f9bf0ef438af45367c51319",
+      "baseline_source_bundle_sha256": "824f0af28a2749dddeee88aa28ec4f77cb602b721f5b315745ee711e7ebf14d7",
+      "fork_runner_source_sha256": "534d6505deae44a8ffd68e1aab71d90f650ee51c11de3de7c112d9f4073bf4a2",
+      "fork_source_bundle_sha256": "37ec5308c812a6e542b518df5cd1aee7c228dc1c086a54c350d71b7655291c77",
+      "pair_directory": "/private/tmp/replay-fault-pilot/diagnostic-pilot-root-3763295516-fork-step-500000-dose-16-20260831T182027.288359Z",
+      "root_seed": 3763295516,
+      "runner_completion_sha256": "3e7ecfc82b76fe531f4a9f77c02ebe490932ced0a86cfc9b4431aadc7c7c3ffb",
+      "source_checkpoint_sha256": "1945cdbd790becfafb1cf7f296c7b550afc19544c32c05f9e1adaaf7671f3c8e"
+    },
+    {
+      "analysis_completion_sha256": "32fc6a1af34b43d0a6c19b7358be8e66feb2ab90945d0757d12755c34006c431",
+      "analysis_source_sha256": "3ab823aa9c2a2b1e9ac480cf5b4d421da618e5ff2f9bf0ef438af45367c51319",
+      "baseline_source_bundle_sha256": "824f0af28a2749dddeee88aa28ec4f77cb602b721f5b315745ee711e7ebf14d7",
+      "fork_runner_source_sha256": "534d6505deae44a8ffd68e1aab71d90f650ee51c11de3de7c112d9f4073bf4a2",
+      "fork_source_bundle_sha256": "37ec5308c812a6e542b518df5cd1aee7c228dc1c086a54c350d71b7655291c77",
+      "pair_directory": "/private/tmp/replay-fault-pilot/diagnostic-pilot-root-3515024991-fork-step-500000-dose-16-20260831T183744.271340Z",
+      "root_seed": 3515024991,
+      "runner_completion_sha256": "f2629020ed8d66f9c23f682bc7f70c0a31e54d80430fe896de085452774752b1",
+      "source_checkpoint_sha256": "e108bc8d0a28d85cd67cf2d03f4bbf7f0acc998d45029724bd89f80e20471b9e"
+    },
+    {
+      "analysis_completion_sha256": "416557d56ddabf6a4f1bec28a957e7ddf2bb08f599037ff4c73a74162d838b3c",
+      "analysis_source_sha256": "3ab823aa9c2a2b1e9ac480cf5b4d421da618e5ff2f9bf0ef438af45367c51319",
+      "baseline_source_bundle_sha256": "824f0af28a2749dddeee88aa28ec4f77cb602b721f5b315745ee711e7ebf14d7",
+      "fork_runner_source_sha256": "534d6505deae44a8ffd68e1aab71d90f650ee51c11de3de7c112d9f4073bf4a2",
+      "fork_source_bundle_sha256": "37ec5308c812a6e542b518df5cd1aee7c228dc1c086a54c350d71b7655291c77",
+      "pair_directory": "/private/tmp/replay-fault-pilot/diagnostic-pilot-root-4076086378-fork-step-500000-dose-16-20260831T185257.230352Z",
+      "root_seed": 4076086378,
+      "runner_completion_sha256": "efa994353a5ec24ff47de08df6935e440f0f182225b43c30198115b364a8bcf9",
+      "source_checkpoint_sha256": "08fc25c2a98a567fe2f44f8701a3c2a8f5fc8a47eb3d6cd64e7f46eee6152572"
+    },
+    {
+      "analysis_completion_sha256": "5196da3df1b68e76011fe48b22e3890598b6267df04fdb557086b2e5b1ab97e5",
+      "analysis_source_sha256": "3ab823aa9c2a2b1e9ac480cf5b4d421da618e5ff2f9bf0ef438af45367c51319",
+      "baseline_source_bundle_sha256": "824f0af28a2749dddeee88aa28ec4f77cb602b721f5b315745ee711e7ebf14d7",
+      "fork_runner_source_sha256": "534d6505deae44a8ffd68e1aab71d90f650ee51c11de3de7c112d9f4073bf4a2",
+      "fork_source_bundle_sha256": "37ec5308c812a6e542b518df5cd1aee7c228dc1c086a54c350d71b7655291c77",
+      "pair_directory": "/private/tmp/replay-fault-pilot/diagnostic-pilot-root-1531397161-fork-step-500000-dose-16-20260831T191010.760009Z",
+      "root_seed": 1531397161,
+      "runner_completion_sha256": "874029dc927e77b5e5ecf57ba9f06fdf51a6d6c8b5f96c0bfbfd3340e3a9a115",
+      "source_checkpoint_sha256": "87ae622e9c9381f3b07f8d9670cabd2946de111d43986b78ecad180e55683fef"
+    },
+    {
+      "analysis_completion_sha256": "47f044cb34370c0919e7333edd26fbb6a4a3b358517946af3a3c6d14515729cb",
+      "analysis_source_sha256": "3ab823aa9c2a2b1e9ac480cf5b4d421da618e5ff2f9bf0ef438af45367c51319",
+      "baseline_source_bundle_sha256": "824f0af28a2749dddeee88aa28ec4f77cb602b721f5b315745ee711e7ebf14d7",
+      "fork_runner_source_sha256": "534d6505deae44a8ffd68e1aab71d90f650ee51c11de3de7c112d9f4073bf4a2",
+      "fork_source_bundle_sha256": "37ec5308c812a6e542b518df5cd1aee7c228dc1c086a54c350d71b7655291c77",
+      "pair_directory": "/private/tmp/replay-fault-pilot/diagnostic-pilot-root-1850709264-fork-step-500000-dose-16-20260831T192515.409759Z",
+      "root_seed": 1850709264,
+      "runner_completion_sha256": "a32b380081d7fa872af272f5dfb252f011e9925690cb6925582f0e1d54cb6d08",
+      "source_checkpoint_sha256": "a99c10cd04fef30f9d67344d240a318ef1e6a1d022e4c9c4626d0e9c6913ed94"
+    },
+    {
+      "analysis_completion_sha256": "efdbc11d408f8335a5754d7697cbac4d66f4cb23f070eb1730997d6e5aab2a3d",
+      "analysis_source_sha256": "3ab823aa9c2a2b1e9ac480cf5b4d421da618e5ff2f9bf0ef438af45367c51319",
+      "baseline_source_bundle_sha256": "824f0af28a2749dddeee88aa28ec4f77cb602b721f5b315745ee711e7ebf14d7",
+      "fork_runner_source_sha256": "534d6505deae44a8ffd68e1aab71d90f650ee51c11de3de7c112d9f4073bf4a2",
+      "fork_source_bundle_sha256": "37ec5308c812a6e542b518df5cd1aee7c228dc1c086a54c350d71b7655291c77",
+      "pair_directory": "/private/tmp/replay-fault-pilot/diagnostic-pilot-root-497083461-fork-step-500000-dose-16-20260831T194133.867769Z",
+      "root_seed": 497083461,
+      "runner_completion_sha256": "951d8db9a673b3027e04f6d4632ef1a72ba53c030c6d31fb3ccc901d57956d97",
+      "source_checkpoint_sha256": "e11958783ffa0a65e25f7def2c8ae6398b27322561f5241bb6d206c40412e9e1"
+    }
+  ],
+  "pair_count": 6,
+  "root_order": [
+    3763295516,
+    3515024991,
+    4076086378,
+    1531397161,
+    1850709264,
+    497083461
+  ],
+  "scope": "diagnostic six-root aggregate; individual trajectories retained; descriptive only",
+  "source_snapshot_sha256": {
+    "experiments/replay_fault/CALIBRATION.md": "7fcaabb60e70c42a406d3df157881301f7d7dbf0c842a13f0e03501be15c8974",
+    "experiments/replay_fault/STUDY.md": "ddd8e8f5f1048b4369663211bb433bc497e4c38cd353c56ef9b2856c9818ae67",
+    "experiments/replay_fault/analyze_pair.py": "3ab823aa9c2a2b1e9ac480cf5b4d421da618e5ff2f9bf0ef438af45367c51319",
+    "experiments/replay_fault/analyze_pilot.py": "23225560c3167d4d167f635cc33170d88032085fd4c353bd366a06532093ca3b",
+    "experiments/replay_fault/pilot_roots.json": "5787674a1ecedba9af7d19b09a67d56d422303d4086f6440168d4b39bf0c91c9"
+  },
+  "stage": "diagnostic-pilot",
+  "study": "003-replay-fault"
+}

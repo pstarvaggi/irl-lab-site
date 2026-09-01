@@ -1,0 +1,196 @@
+---
+import Math from "../../../components/Math.astro";
+import { replayFault as study } from "../../../data/experiments";
+import BaseLayout from "../../../layouts/BaseLayout.astro";
+
+const title = "A replay-fault pilot that stopped | Independent Reinforcement Learning Lab";
+const description =
+  "One calibration checkpoint suggested persistent harm from missing replay rewards. Six predeclared DQN checkpoint forks did not reproduce a stable directional effect.";
+---
+
+<BaseLayout
+  title={title}
+  description={description}
+  canonicalPath={study.slug}
+  article
+  published="2026-09-01"
+  updated={study.updated}
+>
+  <article class="research-note">
+    <header class="article-hero">
+      <div class="article-meta">
+        <span>{study.kind.toUpperCase()} {study.number}</span>
+        <span>01 SEPTEMBER 2026</span>
+        <span>STOPPED AT GATE</span>
+      </div>
+      <h1>A replay-fault pilot <em>that stopped.</em></h1>
+      <p class="article-deck">{study.subtitle}</p>
+      <p class="article-standfirst">
+        One excluded calibration root showed a 13.2% performance deficit after
+        its faulty replay records had been evicted. Across six predeclared roots,
+        only three deficits were positive and the median was 1.15%. The study
+        did not meet its continuation rule.
+      </p>
+      <div class="article-byline">
+        <span>Patrick Starvaggi</span>
+        <span>4 minute read</span>
+      </div>
+    </header>
+
+    <aside class="study-notice" aria-labelledby="study-status-title">
+      <p id="study-status-title">PILOT CLOSED · 31 AUG 2026</p>
+      <div>
+        <strong>The rule required five positive pairs and median post-eviction debt of at least 10%. The observed values were three and 1.15%.</strong>
+        <span>All six checkpoint pairs passed the sham, source-integrity, and learner-health checks.</span>
+      </div>
+    </aside>
+
+    <section class="article-section" aria-labelledby="question-title">
+      <div class="section-rail"><span>01</span><p>THE QUESTION</p></div>
+      <div class="prose">
+        <h2 id="question-title">Can a replay fault outlive its records?</h2>
+        <p class="lead">
+          A faulty target changes a network. That network supplies later bootstrap
+          targets, so an error might continue to matter after the record that caused it
+          has left replay.
+        </p>
+        <p>
+          I tested that possibility with the compact reference DQN for MinAtar
+          Breakout. After 500,000 training frames, each complete checkpoint was copied
+          into clean and fault branches. The clean replay buffer was unchanged. In the
+          fault branch, the 16 newest rewards equal to <Math tex="+1" /> were stored as
+          <Math tex="0" />. Every subsequently collected reward was correct.
+        </p>
+        <p>
+          Networks, optimizer state, environment state, replay position, and random
+          states began identically. A clean/clean sham fork had to continue
+          bit-identically before either treated pair could run. The modified records
+          carried stable IDs, making every replay draw and the final eviction directly
+          observable.
+        </p>
+      </div>
+      <dl class="protocol-grid">
+        <div><dt>Benchmark</dt><dd>MinAtar Breakout</dd></div>
+        <div><dt>Replay</dt><dd>Uniform FIFO · 100k</dd></div>
+        <div><dt>Continuation</dt><dd>200k frames</dd></div>
+        <div><dt>Evaluation</dt><dd>20 fixed episodes / 10k</dd></div>
+      </dl>
+      <div class="prose">
+        <p>
+          For each training root, I integrated clean return minus fault return from the
+          first evaluation after every altered record was gone through the fixed
+          horizon. Dividing by clean performance over that interval produced the signed
+          relative post-eviction deficit, <Math tex="D_{\mathrm{post}}" />. Positive
+          values mean the fault branch performed worse.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="calibration-title">
+      <div class="section-rail"><span>02</span><p>CALIBRATION</p></div>
+      <div class="prose">
+        <h2 id="calibration-title">One root selected the fault size.</h2>
+        <p>
+          An excluded checkpoint tested fault sizes <Math tex="K\in\{4,8,16\}" />
+          in order. The fixed rule was to lock the first size with at least 10%
+          post-eviction deficit, or stop after 16. The six pilot roots and their
+          evaluation panels had already been declared.
+        </p>
+      </div>
+      <div class="exact-table-wrap" role="region" aria-label="Calibration fault-size screen" tabindex="0">
+        <p class="table-label">EXCLUDED CALIBRATION ROOT</p>
+        <table class="exact-table">
+          <thead><tr><th scope="col">Altered rewards</th><th scope="col">Post-eviction deficit</th><th scope="col">Decision</th></tr></thead>
+          <tbody>
+            <tr><td><strong>4</strong></td><td><strong>9.13%</strong></td><td>Advance</td></tr>
+            <tr><td><strong>8</strong></td><td><strong>9.66%</strong></td><td>Advance</td></tr>
+            <tr><td><strong>16</strong></td><td><strong>13.16%</strong></td><td>Lock</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <div class="prose">
+        <p>
+          Sixteen altered rewards cleared the threshold. That result chose the pilot
+          intervention; it did not establish an effect across independently trained
+          agents.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section results-section" aria-labelledby="result-title">
+      <div class="section-rail"><span>03</span><p>THE RESULT</p></div>
+      <div class="prose">
+        <h2 id="result-title">The calibration signal did not reproduce consistently.</h2>
+        <p class="result-lead">
+          Three roots showed positive post-eviction deficits and three showed negative
+          deficits. The median was 1.15%, well below the predeclared 10% threshold.
+        </p>
+      </div>
+      <figure class="results-figure">
+        <img
+          src={study.results.figure}
+          alt="Six paired DQN deficit trajectories fluctuate around zero. Three root-level post-eviction deficits are positive and three are negative, with a median of 1.15 percent."
+        />
+        <figcaption><strong>Figure 1.</strong> Left: clean return minus fault return for every predeclared checkpoint pair. Right: cumulative relative deficit after all altered records were absent. The orange line marks 10%; the black dashed line is the observed median.</figcaption>
+      </figure>
+      <div class="trial-ledger" aria-label="Diagnostic pilot result">
+        <div><strong>3 / 6</strong><span>Positive deficits</span></div>
+        <div><strong>1.15%</strong><span>Median deficit</span></div>
+        <div><strong>6 / 6</strong><span>Healthy clean runs</span></div>
+        <div><strong>6 / 6</strong><span>Technical checks</span></div>
+      </div>
+      <div class="prose result-summary">
+        <p><strong>Decision:</strong> stop or redesign. The pilot does not authorize the planned exposure-versus-residency study.</p>
+      </div>
+    </section>
+
+    <section class="article-section" aria-labelledby="reading-title">
+      <div class="section-rail"><span>04</span><p>THE READING</p></div>
+      <div class="prose">
+        <h2 id="reading-title">No stable directional effect.</h2>
+        <p>
+          The pilot does not prove that the exact effect is zero. Six roots cannot
+          characterize the full training distribution. They are sufficient to reject
+          the continuation rule written for this project: this fault, learner, task,
+          and outcome did not produce a signal stable enough for the proposed mechanism
+          study.
+        </p>
+        <p>
+          The stop is empirical rather than technical. Every checkpoint learned above
+          the fixed health threshold, every clean continuation remained healthy, and
+          every exact sham passed. Enlarging the fault beyond the declared maximum,
+          searching intervention times, or retaining favorable roots would answer a
+          different question after seeing the result.
+        </p>
+      </div>
+    </section>
+
+    <section class="article-section reproducibility" aria-labelledby="record-title">
+      <div class="section-rail"><span>05</span><p>THE RECORD</p></div>
+      <div class="prose">
+        <h2 id="record-title">The result remains inspectable.</h2>
+        <p>
+          The compact record includes one row per independent training root, every
+          unsmoothed paired evaluation, the machine-readable gate decision, and the
+          figure. The repository contains the frozen protocol, declared roots,
+          checkpoint-fork implementation, replay instrumentation, and analysis.
+        </p>
+        <p class="figure-downloads">
+          <a href={study.results.pairMetrics} download>Root metrics (CSV)</a>
+          <a href={study.results.trajectories} download>Paired evaluations (CSV)</a>
+          <a href={study.results.summary} download>Gate record (JSON)</a>
+          <a href={study.results.figure} download>Figure (SVG)</a>
+        </p>
+        <a class="text-link" href="https://github.com/pstarvaggi/independent-rl-lab/tree/main/experiments/replay_fault">Open the protocol and code <span aria-hidden="true">↗</span></a>
+      </div>
+    </section>
+
+    <footer class="article-closing">
+      <p>
+        One checkpoint supplied a plausible story. Six new checkpoints supplied a
+        reason not to publish that story as a finding.
+      </p>
+      <a class="text-link" href="/experiments/">All studies →</a>
+    </footer>
+  </article>
+</BaseLayout>

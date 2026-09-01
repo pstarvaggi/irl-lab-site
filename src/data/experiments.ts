@@ -122,4 +122,25 @@ export const timingOfBadLuck = {
   },
 } as const;
 
-export const experimentIndex = [timingOfBadLuck, shortcutOrShelter] as const;
+export const replayFault = {
+  number: "003",
+  kind: "Closed pilot",
+  title: "A replay-fault pilot that stopped",
+  subtitle: "One promising checkpoint did not reproduce consistently across six training roots",
+  slug: "/experiments/003-replay-fault/",
+  status: "Closed",
+  statusDetail: "Stopped at the predeclared gate",
+  date: "September 2026",
+  updated: "2026-09-01",
+  description:
+    "One calibration checkpoint suggested persistent harm from sixteen missing rewards. Six predeclared DQN checkpoint forks did not reproduce a stable directional effect, so the study stopped.",
+  methods: ["Paired checkpoint forks", "Tagged uniform replay", "Predeclared stopping rule"],
+  results: {
+    figure: "/experiments/003-replay-fault/figure.svg",
+    pairMetrics: "/experiments/003-replay-fault/pair-metrics.csv",
+    trajectories: "/experiments/003-replay-fault/paired-trajectories.csv",
+    summary: "/experiments/003-replay-fault/summary.json",
+  },
+} as const;
+
+export const experimentIndex = [replayFault, timingOfBadLuck, shortcutOrShelter] as const;
